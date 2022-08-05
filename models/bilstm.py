@@ -1,5 +1,7 @@
 import tensorflow as tf
-import tf.keras.backend as K
+from tensorflow import keras
+import keras.backend as K
+import numpy as np
 
 from models.constants import VOCAB_SIZE
 
@@ -49,7 +51,7 @@ class BiLSTMModel():
 		return f1_loss
 
 	def predict(self, x):
-		return self.model.predict(x)
+		return self.model.predict(x, batch_size=512)
 
 	def toBinary(self, Y, threshold=0.5):
 		return np.array([True if y[0] >= threshold else False for y in Y])
