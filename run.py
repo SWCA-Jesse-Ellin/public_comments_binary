@@ -30,7 +30,7 @@ word_index["<UNUSED>"] = 3
 x_tokens = tokenizer.texts_to_sequences(x)
 x_pad = pad_sequences(x_tokens, value=word_index["<PAD>"], padding="post", maxlen=SEQUENCE_LEN)
 
-model = BiLSTMModel(load_file=f"models/saved_models/LSTM_custom_{MODEL_TIMESTAMP}")
+model = BiLSTMModel(load_file=f"models/saved_models/weights/LSTM_custom_{MODEL_TIMESTAMP}")
 
 results = model.predict(x_pad)
 binary = model.toBinary(results, threshold=0.5)

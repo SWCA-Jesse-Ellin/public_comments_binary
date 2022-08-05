@@ -7,14 +7,19 @@ from models.constants import VOCAB_SIZE
 
 class BiLSTMModel():
 	def __init__(self, load_file=None):
-		if load_file:
-			self.model = tf.keras.models.load_model(load_file)
-		else:
-			self.generateModel()
+		self.generateModel()
 		self.compile()
+		if load_file:
+			self.model.load_weights(load_file)
 
 	def generateModel(self):
-		pass
+		self.model = keras.Sequential()
+		self.model.add(keras.layers.Embedding(VOCAB_SIZE, 128))
+		self.model.add(keras.layers.Dropout(rate=0.1))
+		self.model.add(keras.layers.Bidirectional(keras.layers.LSTM(64, return_sequences=True)))
+		self.model.add(keras.layers.Bidirectional(keras.layers.LSTM(64)))
+		self.model.add(keras.layers.Dropout(rate=0.1))
+		self.model.add(keras.layers.Dense(1, activation='sigmoid'))
 
 	def compile(self):
 		self.model.compile(optimizer="adam", loss=self.customLoss(), metrics=["accuracy", tf.keras.metrics.Recall(name="recall")], run_eagerly=True)
