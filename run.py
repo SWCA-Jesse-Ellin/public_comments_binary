@@ -21,18 +21,18 @@ with open(f"models/saved_models/tokenizer_{TOKENIZER_TIMESTAMP}.json") as f:
 	tokenizer = tokenizer_from_json(f.read())
 
 x = data[args["primary_key"]]
-word_index = tokenier.word_index
+word_index = tokenizer.word_index
 word_index = {k : (v+3) for k,v in word_index.items()}
 word_index["<PAD>"] = 0
 word_index["<START>"] = 1
 word_index["<UNK>"] = 2
 word_index["<UNUSED>"] = 3
-x_tokens = tokenier.texts_to_sequences(x)
+x_tokens = tokenizer.texts_to_sequences(x)
 x_pad = pad_sequences(x_tokens, value=word_index["<PAD>"], padding="post", maxlen=SEQUENCE_LEN)
 
 model = BiLSTMModel(load_file=f"models/saved_models/LSTM_custom_{MODEL_TIMESTAMP}")
 
-resutls = model.predict(x_pad)
+results = model.predict(x_pad)
 binary = model.toBinary(results, threshold=0.5)
 
 data["significance"] = binary
