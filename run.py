@@ -33,7 +33,7 @@ x_pad = pad_sequences(x_tokens, value=word_index["<PAD>"], padding="post", maxle
 model = BiLSTMModel(load_file=f"models/saved_models/LSTM_{MODEL_TIMESTAMP}")
 
 resutls = model.predict(x_pad)
-binary = model.to_binary(results, threshold=0.5)
+binary = model.toBinary(results, threshold=0.5)
 
 data["significance"] = binary
 data["confidence"] = results
