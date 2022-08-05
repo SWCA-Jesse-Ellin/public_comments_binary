@@ -52,7 +52,7 @@ class Transformer():
 	def processText(self, text):
 		for k,v in TEXT_REPLACEMENT.items():
 			text = text.replace(k,v)
-		text = re.sub("[^a-zA-Z0-9", '', text)
+		text = re.sub("[^a-zA-Z0-9]", ' ', text)
 		text = re.sub(r'\s+', ' ', text)
 		text = " ".join([word for word in text.split(' ') if word not in self.stopwords])
 		return text.strip().lower()

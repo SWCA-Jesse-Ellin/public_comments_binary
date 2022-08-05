@@ -7,7 +7,7 @@ import pandas as pd
 
 class Pipeline():
 	def __init__(self, primary_key="letter_text"):
-		self.extractor = Extrtactor()
+		self.extractor = Extractor()
 		self.transformer = Transformer(primary_key=primary_key)
 		self.loader = Loader()
 

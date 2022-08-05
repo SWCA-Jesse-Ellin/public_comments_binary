@@ -7,5 +7,5 @@ class Extractor():
 	def dump(self):
 		return self.data
 
-	def load(self, filepath):
+	def extract(self, filepath):
 		self.data = pd.read_csv(filepath, encoding_errors="ignore")
