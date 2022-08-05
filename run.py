@@ -11,7 +11,7 @@ from pipeline.pipe import Pipeline
 
 parser = argpare.ArgumentParser()
 parser.add_argument("-f", "--input-file", type=pathlib.Path, required=True, help="Path to csv file that stores the input data")
-parser.add_argument("-k", "--primary-key", type=str, required=False, default="comment_text", help="String key used in the csv to denote letter text column")
+parser.add_argument("-k", "--primary-key", type=str, required=False, default="letter_text", help="String key used in the csv to denote letter text column (defaults to \"letter_text\"")
 args = vars(parser.parse_args())
 
 pipeline = Pipeline()
