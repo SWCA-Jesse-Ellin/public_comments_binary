@@ -17,6 +17,8 @@ args = vars(parser.parse_args())
 pipeline = Pipeline()
 data = pipeline.process(args["--input-file"])
 
+print(data.head())
+
 with open(f"models/saved_models/tokenizer_{TOKENIZER_TIMESTAMP}.json") as f:
 	tokenizer = tokenizer_from_json(f.read())
 
