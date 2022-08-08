@@ -1,4 +1,4 @@
-from pipeline.constants import TEXT_REPLACEMENT, SEP_METHODS
+from pipeline.constants import TEXT_REPLACEMENT, SEP_METHODS, SEQUENCE_LEN, WINDOW_STEP
 
 import re
 import pandas as pd
@@ -45,8 +45,13 @@ class Transformer():
 		new_text = []
 		if method == "sentence":
 			doc_text = [entry.strip() for entry in re.split("[.!?]+", text)]
-		for entry in tqdm(doc_text, leave=False):
-			new_text.append(self.processText(entry))
+			for entry in tqdm(doc_text, leave=False):
+				new_text.append(self.processText(entry))
+		else if method == "window":
+			window_size = SEQUENCE_LEN
+			step_size = WINDOW_STEP
+			doc_text = self.processText(text)
+			new_text = [doc_text[i:i+window_size] for i in tqdm(range(0, len(doc_text), step_size), leave=False)]
 		return new_text
 
 	def processText(self, text):
