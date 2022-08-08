@@ -3,6 +3,7 @@ import pathlib
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--input-file", type=pathlib.Path, required=True, help="Path to csv file that stores the input data")
 parser.add_argument("-k", "--primary-key", type=str, required=False, default="letter_text", help="String key used in the csv to denote letter text column (defaults to \"letter_text\"")
+parser.add_argument("-s", "--separation-method", type=str, required=False, default="window", help="Method uesd to separate letter text into processing chunks (defaults to \"window\")")
 args = vars(parser.parse_args())
 
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
@@ -15,7 +16,7 @@ from models.constants import TOKENIZER_TIMESTAMP, MODEL_TIMESTAMP, SEQUENCE_LEN
 from pipeline.pipe import Pipeline
 
 pipeline = Pipeline(args["primary_key"])
-data = pipeline.process(args["input_file"])
+data = pipeline.process(args["input_file"], sep=args["separation_method"])
 
 with open(f"models/saved_models/tokenizer_{TOKENIZER_TIMESTAMP}.json") as f:
 	tokenizer = tokenizer_from_json(f.read())
