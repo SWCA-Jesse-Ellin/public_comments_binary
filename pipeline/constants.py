@@ -9,4 +9,5 @@ TEXT_REPLACEMENT = {
 }
 SEP_METHODS = [
 	"sentence",
+	"window",
 ]

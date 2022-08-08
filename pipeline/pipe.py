@@ -13,5 +13,5 @@ class Pipeline():
 
 	def process(self, filepath, sep="sentence", method="return"):
 		self.extractor.extract(filepath)
-		data = self.transformer.transform(self.extractor.dump())
+		data = self.transformer.transform(self.extractor.dump(), method=sep)
 		return self.loader.load(data, method=method)
