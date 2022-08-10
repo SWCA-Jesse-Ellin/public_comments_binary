@@ -7,21 +7,26 @@ def collapse_windows(df, source_text, startcol, endcol, labelcol, textcol, numbe
     collapsed_labels = []
     collapsed_starts = []
     collapsed_ends = []
+    average_confidence = []
     letter_nums = []
     position = 0
     while position < len(df):
+        local_confidence = [df["confidence"].iloc[position]]
         current_label = df[labelcol].iloc[position]
         collapsed_labels.append(df[labelcol].iloc[position])
         collapsed_starts.append(df[startcol].iloc[position])
         collapsed_ends.append(df[endcol].iloc[position])
         letter_nums.append(df["letter_num"].iloc[position])
         if df[labelcol].iloc[position+1] != current_label:
+            average_confidence.append(local_confidence[0])
             position += 1
             continue
         position += 1
         while position < len(df) and df[labelcol].iloc[position] == current_label:
             collapsed_ends[-1] = df[endcol].iloc[position]
+            local_confidence.append(df["confidence"].iloc[position])
             position += 1
+        average_confidence.append(sum(local_confidence)/len(local_confidence))
     for i in range(len(collapsed_starts)):
         if collapsed_ends[i] < collapsed_starts[i]:
             collapsed_ends[i] = -1
@@ -30,12 +35,14 @@ def collapse_windows(df, source_text, startcol, endcol, labelcol, textcol, numbe
                          startcol : collapsed_starts,
                          endcol : collapsed_ends,
                          labelcol : collapsed_labels,
-                         "letter_num" : letter_nums})
+                         "letter_num" : letter_nums,
+                         "confidence" : average_confidence})
 
 def reconstruct_text(df, original_df, startcol, endcol, textcol, numbercol, window_size):
     original_text = {original_df[numbercol].iloc[i] : original_df[textcol].iloc[i] for i in range(len(original_df))}
     scrolling_index = {original_df[numbercol].iloc[i] : 0 for i in range(len(original_df))}
     new_text = []
+    raw_text_indices = []
     for i in tqdm(range(len(df))):
         letter_num = df[numbercol].iloc[i]
         text = df[textcol].iloc[i]
@@ -67,7 +74,10 @@ def reconstruct_text(df, original_df, startcol, endcol, textcol, numbercol, wind
             if j == 5:
                 midpoint = end_index + scrolling_index[letter_num]
         found_text = original_text[letter_num][start_index+scrolling_index[letter_num]:end_index+scrolling_index[letter_num]+1]
+        raw_text_indices.append((start_index+scrolling_index[letter_num],end_index+scrolling_index[letter_num]+1))
         new_text.append(found_text)
         scrolling_index[letter_num] = midpoint
     df["original_text"] = new_text
+    df["original_start"] = [ind[0] for ind in raw_text_indices]
+    df["original_end"] = [ind[1] for ind in raw_text_indices]
     return df
