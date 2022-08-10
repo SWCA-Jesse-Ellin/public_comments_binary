@@ -56,7 +56,7 @@ class BiLSTMModel():
 		return f1_loss
 
 	def predict(self, x):
-		return self.model.predict(x, batch_size=512)
+		return self.model.predict(x, batch_size=1024)
 
 	def toBinary(self, Y, threshold=0.5):
 		return np.array([True if y[0] >= threshold else False for y in Y])

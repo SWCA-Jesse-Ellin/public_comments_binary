@@ -10,5 +10,7 @@ TEXT_REPLACEMENT = {
 SEP_METHODS = [
 	"sentence",
 	"window",
+	"none",
 ]
-WINDOW_STEP = 1
+WINDOW_STEP = 71
+WINDOW_SIZE = 126
